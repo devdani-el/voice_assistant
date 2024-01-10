@@ -25,7 +25,7 @@ def add_task_to_db(message):
         with sqlite3.connect("tasks.db") as conn:
             cursor = conn.cursor()
             cursor.execute('''INSERT INTO tasks (message, display_order)
-                        VALUES (?, (SELECT IFNULL(MAX(display_order), 0) + 1 FROM tasks))''', (message,))
+                           VALUES (?, (SELECT IFNULL(MAX(display_order), 0) + 1 FROM tasks))''', (message,))
             conn.commit()
     except sqlite3.Error as e:
         print(f"Error inserting into the database: {e}")
@@ -59,6 +59,7 @@ def delete_task_keyword(keyword):
 
         with sqlite3.connect("tasks.db") as conn:
             cursor = conn.cursor()
+        pass
     except sqlite3.Error as e:
         print("Error when deleting task:", e)
 
