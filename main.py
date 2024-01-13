@@ -17,6 +17,7 @@ def input_validation(message):
         print(f'Error parsing input: {e}')
         sys.exit()
 
+
 def speech_recognition(timeout=30, language='en'):
     r = sr.Recognizer()
     with sr.Microphone() as source:
@@ -57,12 +58,7 @@ def exit_program():
     sys.exit()
 
 
-def commands(message):
-    if 'help' in message:
-        help_functions()
-
-    # tasks commands 
-    elif 'create' in message and 'task' in message:
+def create_tasks():
         tasks = []
         voice('Say "stop" to end adding tasks.')
 
@@ -82,9 +78,9 @@ def commands(message):
         voice("Sure, I'll remind you about:")
         for i, message in enumerate(tasks, 1):
             voice(f'{i}. {message}')
-        
 
-    elif 'show' in message and 'task' in message:
+
+def display_tasks():
         show_tasks = show_all_tasks
         if show_tasks:
 
@@ -98,7 +94,8 @@ def commands(message):
         else:
             voice('No tasks yet.')
 
-    elif 'delete' in message and 'task' in message:
+
+def delete_tasks(message):
         replace = ['delete', 'task']
         keyword = None
 
@@ -107,16 +104,29 @@ def commands(message):
                 i = message.find(replace)
                 keyword = message[i + len(replace):].strip()
 
-
         delete_task_keyword(keyword)
         if not delete_task_keyword(keyword):
             voice("Task not found.")
         else:
             voice("Task deleted successfully.")
+
+
+def commands(message):
+    if 'help' in message:
+        help_functions()
+
+    # tasks commands 
+    elif 'create' in message and 'task' in message:
+        create_tasks()
+        
+    elif 'show' in message and 'task' in message:
+        display_tasks()
+
+    elif 'delete' in message and 'task' in message:
+        delete_tasks()
     
     elif 'delete all tasks' in message:
         delete_all_tasks()
-
 
     elif 'search' in message:
         query = message.replace('search', '').strip()
@@ -155,6 +165,15 @@ def help_functions():
 
 
 def main():
+    while True:
+        name_assistant = 'assistant'
+        keyword = speech_recognition()
+        print(f'You say: {keyword}')
+        if keyword == name_assistant:
+            voice('Hello, welcome back!')
+            break
+        else:
+            continue
     while True:
         message = speech_recognition()
         if message:
