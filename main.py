@@ -1,8 +1,7 @@
 import sys
 import tasks_list as tl
 import time
-import pyttsx3
-import speech_recognition as sr
+from assistant import speech_recognition, voice
 from googlesearch import search
 from translate import Translator
 from wikisearch import wiki
@@ -17,42 +16,6 @@ def input_validation(message):
     except ValueError as e:
         print(f'Error parsing input: {e}')
         sys.exit()
-
-
-def speech_recognition(timeout=30, language='en'):
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        try:
-            print('Speak now...')
-            audio = r.listen(source, timeout=timeout)
-            return r.recognize_google(audio, language=language)
-        except sr.UnknownValueError:
-            print('Speech recognition could not understand audio')
-        except sr.RequestError as e:
-            print(f'Error accessing the speech recognition service: {e}')
-        except Exception as e:
-            print(f'An unexpected error occurred: {e}')
-
-        return ''
-        
-
-def voice(message, voice_index=1, rate=180):
-    engine = pyttsx3.init()
-
-    try:
-        voices = engine.getProperty('voices')
-        engine.setProperty('voice', voices[voice_index].id)
-        engine.setProperty('rate', rate)
-
-        print(f'Assistant: {message}')
-        engine.say(message)
-        engine.runAndWait()
-
-    except pyttsx3.EngineError as e:
-        print(f'Error initializing the text-to-speech engine: {e}')
-    except Exception as e:
-        print(f'Error speaking the message: {e}')
-
 
 def exit_program():
     sys.exit()
@@ -126,10 +89,24 @@ def commands(message):
 
     elif 'search' in message and 'wikipedia' in message:
         replace = ['search', 'wikipedia']
-        query = query.replace(replace, '')
-        wiki(query)
 
-    elif 'search' in message:
+        query = message
+        for word in replace:
+            query = query.replace(word, '').strip()
+        print(query)
+
+        if query:
+            info = wiki(query)
+            if info:      
+                voice('Here results to your search:')
+                for i, j in info.items():
+                    voice(f'{i}: {j}')
+            else:
+                print('No information found.')
+        else:
+            voice('Please provide a valid search query.')
+
+    elif 'search' in message and 'google' in message:
         query = message.replace('search', '').strip()
         voice(f"Here are the search results for {query}.")
         # Code to perform web search goes here
@@ -179,8 +156,8 @@ def main():
     while True:
         message = speech_recognition()
         if message:
-            print(f'You: {message}')
-            commands(message)
+            print(f'You: {message.lower()}')
+            commands(message.lower())
 
 
 if __name__ == '__main__':
