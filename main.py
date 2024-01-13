@@ -1,10 +1,11 @@
 import sys
-from tasks_list import add_task_to_db, show_all_tasks, delete_task_keyword, delete_all_tasks
+import tasks_list as tl
 import time
 import pyttsx3
 import speech_recognition as sr
 from googlesearch import search
 from translate import Translator
+from wikisearch import wiki
 
 
 def input_validation(message):
@@ -54,7 +55,6 @@ def voice(message, voice_index=1, rate=180):
 
 
 def exit_program():
-    voice('Goodbye!')
     sys.exit()
 
 
@@ -73,7 +73,7 @@ def create_tasks():
             tasks.append(message)
         
         for task in tasks:
-            add_task_to_db(task)
+            tl.add_task_to_db(task)
         
         voice("Sure, I'll remind you about:")
         for i, message in enumerate(tasks, 1):
@@ -81,15 +81,15 @@ def create_tasks():
 
 
 def display_tasks():
-        show_tasks = show_all_tasks
+        show_tasks = tl.show_all_tasks()
         if show_tasks:
 
-            show_all_tasks()
-            if not show_all_tasks():
+            tl.show_all_tasks()
+            if not tl.show_all_tasks():
                 voice('No tasks found.')
             else:
                 voice('Here are your tasks:')
-                for i, message in enumerate(show_all_tasks.all_tasks, 1):
+                for i, message in enumerate(tl.show_all_tasks.all_tasks, 1):
                     voice(f'{i}. {message[1]}')
         else:
             voice('No tasks yet.')
@@ -104,8 +104,8 @@ def delete_tasks(message):
                 i = message.find(replace)
                 keyword = message[i + len(replace):].strip()
 
-        delete_task_keyword(keyword)
-        if not delete_task_keyword(keyword):
+        tl.delete_task_keyword(keyword)
+        if not tl.delete_task_keyword(keyword):
             voice("Task not found.")
         else:
             voice("Task deleted successfully.")
@@ -115,18 +115,19 @@ def commands(message):
     if 'help' in message:
         help_functions()
 
-    # tasks commands 
     elif 'create' in message and 'task' in message:
         create_tasks()
-        
     elif 'show' in message and 'task' in message:
         display_tasks()
-
     elif 'delete' in message and 'task' in message:
         delete_tasks()
-    
     elif 'delete all tasks' in message:
-        delete_all_tasks()
+        tl.delete_all_tasks()
+
+    elif 'search' in message and 'wikipedia' in message:
+        replace = ['search', 'wikipedia']
+        query = query.replace(replace, '')
+        wiki(query)
 
     elif 'search' in message:
         query = message.replace('search', '').strip()
@@ -150,7 +151,8 @@ def commands(message):
         else:
             voice("Sorry, I couldn't recognize the message.")
 
-    elif 'stop' in message:
+    elif message in ['stop', 'exit', 'quit']:
+        voice('Goodbye!')
         exit_program()
 
 
@@ -168,7 +170,7 @@ def main():
     while True:
         name_assistant = 'assistant'
         keyword = speech_recognition()
-        print(f'You say: {keyword}')
+        print(f'You said: {keyword}')
         if keyword == name_assistant:
             voice('Hello, welcome back!')
             break
