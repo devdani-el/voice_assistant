@@ -108,11 +108,15 @@ def commands(message):
                 keyword = message[i + len(replace):].strip()
 
 
-        delete_task_keyword(message)
-        if not delete_task_keyword(message):
+        delete_task_keyword(keyword)
+        if not delete_task_keyword(keyword):
             voice("Task not found.")
         else:
             voice("Task deleted successfully.")
+    
+    elif 'delete all tasks' in message:
+        delete_all_tasks()
+
 
     elif 'search' in message:
         query = message.replace('search', '').strip()
