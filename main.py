@@ -21,6 +21,16 @@ def exit_program():
     sys.exit()
 
 
+def help_functions():
+    helps = {
+        'Tasks': 'Do you have something important to remember? say "create task"',
+        'Web search': 'Access the web by saying "search for", and then say what you want to search for.',
+        'Translator': 'Translate any word you want with the command: "translate to", followed by the desired language'
+    }
+    for key, value in helps.items():
+        voice(f'{key}: {value}')
+
+
 def create_tasks():
         tasks = []
         voice('Say "stop" to end adding tasks.')
@@ -74,20 +84,7 @@ def delete_tasks(message):
             voice("Task deleted successfully.")
 
 
-def commands(message):
-    if 'help' in message:
-        help_functions()
-
-    elif 'create' in message and 'task' in message:
-        create_tasks()
-    elif 'show' in message and 'task' in message:
-        display_tasks()
-    elif 'delete' in message and 'task' in message:
-        delete_tasks()
-    elif 'delete all tasks' in message:
-        tl.delete_all_tasks()
-
-    elif 'search' in message and 'wikipedia' in message:
+def wiki_search(message):
         replace = ['search', 'wikipedia']
 
         query = message
@@ -105,6 +102,23 @@ def commands(message):
                 print('No information found.')
         else:
             voice('Please provide a valid search query.')
+
+
+def commands(message):
+    if 'help' in message:
+        help_functions()
+
+    elif 'create' in message and 'task' in message:
+        create_tasks()
+    elif 'show' in message and 'task' in message:
+        display_tasks()
+    elif 'delete' in message and 'task' in message:
+        delete_tasks()
+    elif 'delete all tasks' in message:
+        tl.delete_all_tasks()
+
+    elif 'search' in message and 'wikipedia' in message:
+        wiki_search()
 
     elif 'search' in message and 'google' in message:
         query = message.replace('search', '').strip()
@@ -131,16 +145,6 @@ def commands(message):
     elif message in ['stop', 'exit', 'quit']:
         voice('Goodbye!')
         exit_program()
-
-
-def help_functions():
-    helps = {
-        'Tasks': 'Do you have something important to remember? say "create task"',
-        'Web search': 'Access the web by saying "search for", and then say what you want to search for.',
-        'Translator': 'Translate any word you want with the command: "translate to", followed by the desired language'
-    }
-    for key, value in helps.items():
-        voice(f'{key}: {value}')
 
 
 def main():
