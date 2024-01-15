@@ -104,9 +104,26 @@ def wiki_search(message):
             voice('Please provide a valid search query.')
 
 
+def rename_assistant():
+    while True:
+        try:
+            name_assistant = 'assistant'
+            rename = voice("what is your assistant's name?")
+            while True:
+                name = speech_recognition()
+                if name == name_assistant:
+                    voice(f"Your assistant's name: {name_assistant}")
+                else:
+                    voice(f"Assistant's name: {rename}")
+                
+
+
 def commands(message):
     if 'help' in message:
         help_functions()
+    
+    elif 'rename' in message and 'assistant' in message:
+
 
     elif 'create' in message and 'task' in message:
         create_tasks()
