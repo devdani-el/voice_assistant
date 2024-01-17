@@ -103,27 +103,30 @@ def wiki_search(message):
         else:
             voice('Please provide a valid search query.')
 
+name_assistant = {'name': 'Assistant'}
+
+def get_user_input():
+    try:
+        voice("what is your assistant's name?")
+        while True:
+            rename = speech_recognition()
+            print(f'You said: {rename}')
+            if rename is not None:
+                return rename
+            else:
+                voice("Sorry, I didn't catch that. Could you please repeat?")
+    except ValueError as e:
+        print(f'Error: {e}')
+
 
 def rename_assistant():
-    name_assistant = [
-        {'name': ''}
-    ]
-    while True:
-        try:
-            voice("what is your assistant's name?")
-            while True:
-                rename = speech_recognition()
-                print(f'You said: {rename}')
-                if rename is not None:
-                    name_assistant.append(rename)
-                    if name_assistant is None:
-                        voice(f"Assistant's name: {rename}")
-                        break
-                else:
-                    continue
-        except ValueError as e:
-            print(f'Error: {e}')
-                
+    try:
+        new_name = get_user_input()
+        name_assistant['name'] = new_name
+        voice(f"Assistant's name updated to {new_name}")
+    except Exception as e:
+        print(f'Error: {e}')
+
 
 def commands(message):
     if 'help' in message:
