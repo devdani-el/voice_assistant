@@ -104,30 +104,46 @@ def wiki_search(message):
             voice('Please provide a valid search query.')
 
 
-name_assistant = {'name': 'Assistant'}
-
-
-def get_user_input():
-    try:
-        voice("what is your assistant's name?")
-        while True:
-            rename = speech_recognition()
-            print(f'You said: {rename}')
-            if rename is not None:
-                return rename
-            else:
-                voice("Sorry, I didn't catch that. Could you please repeat?")
-    except ValueError as e:
-        print(f'Error: {e}')
+assistant_name = {'name': 'Assistant'}
 
 
 def rename_assistant():
     try:
-        new_name = get_user_input()
-        name_assistant['name'] = new_name
-        voice(f"Assistant's name updated to {new_name}")
+        voice("What is your assistant's name?")
+        while True:
+            new_name = speech_recognition()
+            print(f'You said: {new_name}')
+            if new_name is not None:
+                assistant_name['name'] = new_name
+                voice(f"Assistant's name updated to {new_name}")
+                return
+            else:
+                voice("Sorry, I didn't catch that. Could you please repeat?")
+    except ValueError as e:
+        print(f'Error: {e}')
     except Exception as e:
         print(f'Error: {e}')
+
+
+user_name = {'name': 'User'}
+
+
+def your_name():
+    try:
+        voice("What is your name?")
+        while True:
+            nickname = speech_recognition()
+            print(f'You said: {nickname}')
+            if nickname is not None:
+                user_name['name'] = nickname
+                voice(f"User's name updated to {nickname}")
+                return
+            else:
+                voice("Sorry, I didn't catch that. Could you please repeat?")
+    except ValueError as e:
+        print(f'Error: {e}')
+    except Exception as e:
+        print(f'Error: {e}')           
 
 
 def commands(message):
@@ -136,6 +152,8 @@ def commands(message):
     
     elif 'rename' in message and 'assistant' in message:
         rename_assistant()
+    elif 'change my name' in message:
+        your_name()
     elif 'create' in message and 'task' in message:
         create_tasks()
     elif 'show' in message and 'task' in message:
@@ -177,10 +195,9 @@ def commands(message):
 
 def main():
     while True:
-        name_assistant = 'assistant'
         keyword = speech_recognition()
         print(f'You said: {keyword}')
-        if keyword == name_assistant:
+        if keyword.capitalize() == assistant_name['name']:
             voice('Hello, welcome back!')
             break
         else:
