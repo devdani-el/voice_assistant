@@ -115,16 +115,18 @@ def rename_assistant():
                     voice(f"Your assistant's name: {name_assistant}")
                 else:
                     voice(f"Assistant's name: {rename}")
-                
+        except ValueError as e:
+            print(f'Error: {e}')
 
+        return rename_assistant
+                
 
 def commands(message):
     if 'help' in message:
         help_functions()
     
     elif 'rename' in message and 'assistant' in message:
-
-
+        rename_assistant()
     elif 'create' in message and 'task' in message:
         create_tasks()
     elif 'show' in message and 'task' in message:
