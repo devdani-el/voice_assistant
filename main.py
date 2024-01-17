@@ -103,7 +103,9 @@ def wiki_search(message):
         else:
             voice('Please provide a valid search query.')
 
+
 name_assistant = {'name': 'Assistant'}
+
 
 def get_user_input():
     try:
