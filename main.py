@@ -177,10 +177,9 @@ def commands(message):
 
 def main():
     while True:
-        name_assistant = 'assistant'
         keyword = speech_recognition()
         print(f'You said: {keyword}')
-        if keyword == name_assistant:
+        if keyword.capitalize() == name_assistant['name']:
             voice('Hello, welcome back!')
             break
         else:
