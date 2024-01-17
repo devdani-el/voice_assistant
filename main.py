@@ -105,20 +105,24 @@ def wiki_search(message):
 
 
 def rename_assistant():
+    name_assistant = [
+        {'name': ''}
+    ]
     while True:
         try:
-            name_assistant = 'assistant'
-            rename = voice("what is your assistant's name?")
+            voice("what is your assistant's name?")
             while True:
-                name = speech_recognition()
-                if name == name_assistant:
-                    voice(f"Your assistant's name: {name_assistant}")
+                rename = speech_recognition()
+                print(f'You said: {rename}')
+                if rename is not None:
+                    name_assistant.append(rename)
+                    if name_assistant is None:
+                        voice(f"Assistant's name: {rename}")
+                        break
                 else:
-                    voice(f"Assistant's name: {rename}")
+                    continue
         except ValueError as e:
             print(f'Error: {e}')
-
-        return rename_assistant
                 
 
 def commands(message):
