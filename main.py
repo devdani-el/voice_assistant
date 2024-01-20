@@ -164,7 +164,7 @@ def commands(message):
         tl.delete_all_tasks()
 
     elif 'search' in message and 'wikipedia' in message:
-        wiki_search()
+        wiki_search(message)
 
     elif 'search' in message and 'google' in message:
         query = message.replace('search', '').strip()
