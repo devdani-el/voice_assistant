@@ -1,6 +1,6 @@
 # Voice Assistant with Speech Recognition and pyttsx3
 
-![Voice Assistant](voice_assistant.jpg)
+![Voice Assistant](assets/voice_assistant.jpg)
 
 This is a feature-rich voice assistant that seamlessly combines Speech Recognition and pyttsx3 for interactive voice-based interactions. From managing tasks to web searching, Wikipedia queries, translation, and personalization, this assistant is designed to cater to various needs.
 
