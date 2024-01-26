@@ -89,25 +89,7 @@ def wiki_search(message):
             print('Please provide a valid search query.')
 
 
-assistant_name = {'name': 'Assistant'}
 
-
-def rename_assistant():
-    try:
-        print("What is your assistant's name?")
-        while True:
-            new_name = str(input('Msg: '))
-            print(f'You said: {new_name}')
-            if new_name is not None:
-                assistant_name['name'] = new_name
-                print(f"Assistant's name updated to {new_name}")
-                return
-            else:
-                print("Sorry, I didn't catch that. Could you please repeat?")
-    except ValueError as e:
-        print(f'Error: {e}')
-    except Exception as e:
-        print(f'Error: {e}')
 
 
 user_name = {'name': 'User'}
