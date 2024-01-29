@@ -2,10 +2,21 @@ import sys
 import commands
 import pyttsx3
 import speech_recognition as sr
+from datetime import datetime
 
 
 def start():
-    assistant = {'name': 'Assistant'}
+    assistant = {
+        'name': 'Assistant',
+        'month': 1,
+        'year': 2024
+    }
+
+    def age_assistant():
+        month = datetime.now().month - assistant['month']
+        year = datetime.now().year = assistant['year']
+        voice(f'I have {month} months and {year} years old')
+        return age_assistant
 
 
     def input_validation(message):
@@ -72,6 +83,13 @@ def start():
             print(f'Error: {e}')
 
 
+    def config_assistant():
+        if 'rename' in message and 'assistant' in message:
+            rename_assistant()
+        elif 'how old are you' in message:
+            age_assistant()
+
+
     while True:
         keyword = speech_recognition().capitalize()
         message = input_validation(keyword)
@@ -85,8 +103,7 @@ def start():
         message = input_validation(keyword).capitalize()
         if message:
             print(f'You: {message}')
-            if 'rename' in message and 'assistant' in message:
-                rename_assistant()
+            config_assistant()
             commands(message)
 
 
