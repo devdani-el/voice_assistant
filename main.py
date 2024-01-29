@@ -6,19 +6,6 @@ from datetime import datetime
 
 
 def start():
-    assistant = {
-        'name': 'Assistant',
-        'month': 1,
-        'year': 2024
-    }
-
-    def age_assistant():
-        month = datetime.now().month - assistant['month']
-        year = datetime.now().year = assistant['year']
-        voice(f'I have {month} months and {year} years old')
-        return age_assistant
-
-
     def input_validation(message):
         MAX_INPUT_LENGTH = 100
         try:
@@ -65,6 +52,29 @@ def start():
             print(f'Error speaking the message: {e}')
 
 
+    assistant = {
+        'name': 'Assistant',
+        'month': 1,
+        'year': 2024
+    }
+
+    def age_assistant():
+        month = datetime.now().month - assistant['month']
+        year = datetime.now().year = assistant['year']
+        voice(f'I have {month} months and {year} years old')
+        return age_assistant
+    
+    def help_functions():
+        voice('I am a virtual assistant, and I am here to help you. In my system, microsystems are being developed where each one has its own responsibility. Currently, I can:')
+        helps = {
+            'Tasks': 'Do you have something important to remember or to-do? say "create task"',
+            'Web search': 'Access the web by saying "search for", and then say what you want to search for.',
+            'Translator': 'Translate any word you want with the command: "translate to", followed by the desired language'
+        }
+        for key, value in helps.items():
+            print(f'{key}: {value}')
+
+
     def rename_assistant():
         try:
             print("What is your assistant's name?")
@@ -88,6 +98,8 @@ def start():
             rename_assistant()
         elif 'how old are you' in message:
             age_assistant()
+        elif 'help' in message:
+            help_functions()
 
 
     while True:

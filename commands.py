@@ -6,16 +6,6 @@ from translate import Translator
 from wikisearch import wiki
 
 
-def help_functions():
-    helps = {
-        'Tasks': 'Do you have something important to remember or to-do? say "create task"',
-        'Web search': 'Access the web by saying "search for", and then say what you want to search for.',
-        'Translator': 'Translate any word you want with the command: "translate to", followed by the desired language'
-    }
-    for key, value in helps.items():
-        print(f'{key}: {value}')
-
-
 def create_tasks():
         tasks = []
         print('Say "stop" to end adding tasks.')
@@ -110,11 +100,8 @@ def your_name():
         print(f'Error: {e}')           
 
 
-def commands(message):
-    if 'help' in message:
-        help_functions()
-    
-    elif 'change my name' in message:
+def commands(message):    
+    if 'change my name' in message:
         your_name()
     elif 'create' in message and 'task' in message:
         create_tasks()
