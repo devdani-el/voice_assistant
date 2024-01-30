@@ -6,59 +6,6 @@ from translate import Translator
 from wikisearch import wiki
 
 
-def create_tasks():
-        tasks = []
-        print('Say "stop" to end adding tasks.')
-
-        while True:
-            message = str(input('Msg: '))
-            print(f'You: {message}')
-            if not message:
-                continue
-            if 'stop' in message:
-                break
-        
-            tasks.append(message)
-        
-        for task in tasks:
-            tl.add_task_to_db(task)
-        
-        print("Sure, I'll remind you about:")
-        for i, message in enumerate(tasks, 1):
-            print(f'{i}. {message}')
-
-
-def display_tasks():
-        show_tasks = tl.show_all_tasks()
-        if show_tasks:
-
-            tl.show_all_tasks()
-            if not tl.show_all_tasks():
-                print('No tasks found.')
-            else:
-                print('Here are your tasks:')
-                for i, message in enumerate(tl.show_all_tasks.all_tasks, 1):
-                    print(f'{i}. {message[1]}')
-        else:
-            print('No tasks yet.')
-
-
-def delete_tasks(message):
-        replace = ['delete', 'task']
-        keyword = None
-
-        for replace in replace:
-            if replace in message:
-                i = message.find(replace)
-                keyword = message[i + len(replace):].strip()
-
-        tl.delete_task_keyword(keyword)
-        if not tl.delete_task_keyword(keyword):
-            print("Task not found.")
-        else:
-            print("Task deleted successfully.")
-
-
 def wiki_search(message):
         replace = ['search', 'wikipedia']
 
@@ -103,14 +50,6 @@ def your_name():
 def commands(message):    
     if 'change my name' in message:
         your_name()
-    elif 'create' in message and 'task' in message:
-        create_tasks()
-    elif 'show' in message and 'task' in message:
-        display_tasks()
-    elif 'delete' in message and 'task' in message:
-        delete_tasks()
-    elif 'delete all tasks' in message:
-        tl.delete_all_tasks()
 
     elif 'search' in message and 'wikipedia' in message:
         wiki_search(message)
