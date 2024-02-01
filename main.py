@@ -1,11 +1,16 @@
+# Standard library imports
 import sys
+import time
+from datetime import datetime
+
+# Third-party library imports
 import pyttsx3
 import speech_recognition as sr
-from datetime import datetime
-import tasks_list as Tl
-from translate import Translator
-import time
 from googlesearch import search
+from translate import Translator
+
+# Local imports
+import tasks_list as Tl
 from wikisearch import wiki
 
 
@@ -71,10 +76,13 @@ def assistant():
     months = (current_year - info['year']) * 12 + (current_month - info['month'])
     voice(f"I'm {months} months and {current_year - info['year']} years old")
 
+
 def user():
     info = {
-        'name': 'user main',
+        'name': 'user main'
     }
+    return info
+
 
 def help_functions():
     voice('I\'m here to help! Currently, I can assist you with: tasks, perform web searches, and even translate words for you. Feel free to ask anything.')
@@ -94,16 +102,16 @@ def rename_assistant():
             new_name = str(input('Enter the name: '))
 
             if new_name.strip():
-                print(f'You chose the name: {new_name}')
+                voice(f'You chose the name: {new_name}')
                 verification = speech_recognition(f"Do you want to save '{new_name}' as my name?")
                 if verification.lower() == 'yes':
                     assistant.info['name'] = new_name
-                    print(f'My name is now {new_name}. How may I assist you?')
+                    voice(f'My name is now {new_name}. How may I assist you?')
                     return
                 else:
                     continue
             else:
-                print('I understand it\'s a big decision. Could you please provide a name for me?')
+                voice('I understand it\'s a big decision. Could you please provide a name for me?')
     except ValueError as e:
         print(f'Error: {e}')
     except Exception as e:
@@ -114,18 +122,23 @@ def your_name():
     try:
         print("What is your name?")
         while True:
-            nickname = str(input('Msg: '))
-            print(f'You said: {nickname}')
-            if nickname is not None:
-                user['name'] = nickname
-                print(f"User's name updated to {nickname}")
-                return
+            nickname = str(input('Enter the name: '))
+            
+            if nickname.strip():
+                voice(f'You chose the name: {nickname}')
+                verification = speech_recognition(f"Do you want to save '{nickname}' as your name?")
+                if verification.lower() == 'yes':
+                    user.info['name'] = nickname
+                    voice(f"I'll call you {nickname} now")
+                    return
+                else:
+                    continue
             else:
-                print("Sorry, I didn't catch that. Could you please repeat?")
+                voice('It\'s hard to choose a name, isn\'t it. Come on, be creative')
     except ValueError as e:
-        print(f'Error: {e}')
+            print(f'Error: {e}')
     except Exception as e:
-        print(f'Error: {e}')          
+            print(f'Error: {e}')
 
 
 def main_commands(message):
