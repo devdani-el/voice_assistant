@@ -1,5 +1,4 @@
 import sys
-import commands
 import pyttsx3
 import speech_recognition as sr
 from datetime import datetime
@@ -7,6 +6,7 @@ import tasks_list as Tl
 from translate import Translator
 import time
 from googlesearch import search
+from wikisearch import wiki
 
 
 def input_validation(message):
@@ -71,6 +71,10 @@ def assistant():
     months = (current_year - info['year']) * 12 + (current_month - info['month'])
     voice(f"I'm {months} months and {current_year - info['year']} years old")
 
+def user():
+    info = {
+        'name': 'user main',
+    }
 
 def help_functions():
     voice('I\'m here to help! Currently, I can assist you with: tasks, perform web searches, and even translate words for you. Feel free to ask anything.')
@@ -106,6 +110,24 @@ def rename_assistant():
         print(f'Error: {e}')
 
 
+def your_name():
+    try:
+        print("What is your name?")
+        while True:
+            nickname = str(input('Msg: '))
+            print(f'You said: {nickname}')
+            if nickname is not None:
+                user['name'] = nickname
+                print(f"User's name updated to {nickname}")
+                return
+            else:
+                print("Sorry, I didn't catch that. Could you please repeat?")
+    except ValueError as e:
+        print(f'Error: {e}')
+    except Exception as e:
+        print(f'Error: {e}')          
+
+
 def main_commands(message):
     try:
         if 'rename' in message and 'assistant' in message:
@@ -120,7 +142,10 @@ def main_commands(message):
 
 def commands(message):
 
-    if 'create' in message and 'task' in message:
+    if 'change my name' in message:
+        your_name()
+
+    elif 'create' in message and 'task' in message:
         tasks = []
         voice('Say "stop" to end adding tasks.')
 
@@ -172,6 +197,26 @@ def commands(message):
 
     elif 'delete all tasks' in message:
         Tl.delete_all_tasks()
+
+    elif 'search' in message and 'wikipedia' in message:
+        replace = ['search', 'wikipedia']
+
+        query = message
+        for word in replace:
+            query = query.replace(word, '').strip()
+        print(query)
+
+        if query:
+            info = wiki(query)
+            if info:      
+                print('Here results to your search:')
+                for i, j in info.items():
+                    print(f'{i}: {j}')
+            else:
+                print('No information found.')
+        else:
+            print('Please provide a valid search query.')
+
 
     elif 'search' in message and 'google' in message:
         query = message.replace('search', '').strip()
