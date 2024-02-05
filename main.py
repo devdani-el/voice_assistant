@@ -230,11 +230,9 @@ def commands(message):
         else:
             print('Please provide a valid search query.')
 
-
     elif 'search' in message and 'google' in message:
         query = message.replace('search', '').strip()
         print(f"Here are the search results for {query}.")
-        # Code to perform web search goes here
         for n, result in enumerate(search(query), start=1):
             print(f"{n}. {result}")
             time.sleep(1)
