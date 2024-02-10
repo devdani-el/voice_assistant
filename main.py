@@ -1,6 +1,7 @@
 # Standard library imports
 import sys
 import time
+import sqlite3
 from datetime import datetime
 
 # Third-party library imports
@@ -10,7 +11,7 @@ from googlesearch import search
 from translate import Translator
 
 # Local imports
-import tasks_list as Tl
+import db_main as dbm
 from wikisearch import wiki
 
 
@@ -77,13 +78,6 @@ def assistant():
     voice(f"I'm {months} months and {current_year - info['year']} years old")
 
 
-def user():
-    info = {
-        'name': 'user main'
-    }
-    return info
-
-
 def help_functions():
     voice('I\'m here to help! Currently, I can assist you with: tasks, perform web searches, and even translate words for you. Feel free to ask anything.')
     helps = {
@@ -128,7 +122,7 @@ def your_name():
                 voice(f'You chose the name: {nickname}')
                 verification = speech_recognition(f"Do you want to save '{nickname}' as your name?")
                 if verification.lower() == 'yes':
-                    user.info['name'] = nickname
+                    dbm.user.info['name'] = nickname
                     voice(f"I'll call you {nickname} now")
                     return
                 else:
@@ -173,22 +167,22 @@ def commands(message):
         tasks.append(message)
         
         for task in tasks:
-            Tl.add_task_to_db(task)
+            dbm.add_task_to_db(task)
 
         voice("Sure, I'll remind you about:")
         for i, message in enumerate(tasks, 1):
             voice(f'{i}. {message}')
         
     elif 'display' in message and 'task' in message:
-        show_tasks = Tl.show_all_tasks()
+        show_tasks = dbm.show_all_tasks()
         if show_tasks:
 
-            Tl.show_all_tasks()
-            if not Tl.show_all_tasks():
+            dbm.show_all_tasks()
+            if not dbm.show_all_tasks():
                 voice('No tasks found.')
             else:
                 voice('Here are your tasks:')
-                for i, message in enumerate(Tl.show_all_tasks.all_tasks, 1):
+                for i, message in enumerate(dbm.show_all_tasks.all_tasks, 1):
                     voice(f'{i}. {message[1]}')
         else:
             print('No tasks yet.')
@@ -202,14 +196,14 @@ def commands(message):
                 i = message.find(replace)
                 keyword = message[i + len(replace):].strip()
 
-        Tl.delete_task_keyword(keyword)
-        if not Tl.delete_task_keyword(keyword):
+        dbm.delete_task_keyword(keyword)
+        if not dbm.delete_task_keyword(keyword):
             voice("Task not found.")
         else:
             voice("Task deleted successfully.")
 
     elif 'delete all tasks' in message:
-        Tl.delete_all_tasks()
+        dbm.delete_all_tasks()
 
     elif 'search' in message and 'wikipedia' in message:
         replace = ['search', 'wikipedia']
