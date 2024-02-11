@@ -107,13 +107,13 @@ def help_functions():
 
 def rename_assistant():
     try:
-        print('What would you like to call me?')
+        voice('What would you like to call me?')
         while True:
-            new_name = str(input('Enter the name: '))
+            new_name = speech_recognition()
 
             if new_name.strip():
                 voice(f'You chose the name: {new_name}')
-                verification = speech_recognition(f"Do you want to save '{new_name}' as my name?")
+                verification = speech_recognition(voice(f"Do you want to save '{new_name}' as my name?"))
                 if verification.lower() == 'yes':
                     assistant.info['name'] = new_name
                     voice(f'My name is now {new_name}. How may I assist you?')
@@ -130,9 +130,9 @@ def rename_assistant():
 
 def your_name():
     try:
-        print("What is your name?")
+        voice("What is your name?")
         while True:
-            nickname = str(input('Enter the name: '))
+            nickname = speech_recognition()
             
             if nickname.strip():
                 voice(f'You chose the name: {nickname}')
@@ -159,6 +159,9 @@ def main_commands(message):
             assistant()
         elif 'help' in message:
             help_functions()
+        elif 'day begins' in message:
+            voice('Alright, where do we begin?')
+            commands(message)
     except Exception as e:
         print(f'Sorry, something went wrong while processing your request: {e}')
 
@@ -278,21 +281,16 @@ def main():
             message = input_validation(keyword)
             if message == assistant.get_name():
                 voice(f"Hello! I'm {assistant.get_name()}. How can I assist you today?")
-                break
+                while True:
+                    conncommand = speech_recognition()
+                    message = input_validation(conncommand)
+                    if message:
+                        print(f'You: {message}')
+                        main_commands(message)
+                    else:
+                        continue
             else:
                 continue
-
-        while True:
-            keyword = speech_recognition().capitalize()
-            message = input_validation(keyword)
-            if message:
-                print(f'You: {message}')
-                main_commands_list = main_commands(message)
-                if main_commands_list and message in main_commands_list:
-                    main_commands(message)
-                else:
-                    commands(message)
-                
 
     except KeyboardInterrupt:
         print("\nExiting the program.")
