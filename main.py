@@ -15,19 +15,31 @@ import db_main as dbm
 from wikisearch import wiki
 
 
+class Assistant:
+    def __init__(self):
+        self.info = {
+            'name': 'Assistant',
+            'month': 1,
+            'year': 2024
+        }
+
+    def get_name(self):
+        return self.info.get('name')
+
+    def set_name(self, new_name):
+        self.info['name'] = new_name
+
+
 def input_validation(message):
     MAX_INPUT_LENGTH = 100
-    try:
-        if not message.strip():
-            raise ValueError(voice('Sorry, I didn\'t catch that. Could you please speak a bit more clearly and try again?'))
-
-        if len(message) > MAX_INPUT_LENGTH:
-            raise ValueError(voice('The message you submitted was too long. Could you shorten it and try again, please?'))
-        
-        return ''.join(char for char in message if char.isalnum() or char.isspace())
-    except ValueError as e:
-        print(f'Error: {e}')
-        sys.exit()
+    while True:
+        try:
+            if len(message) > MAX_INPUT_LENGTH:
+                raise ValueError(voice('The message you submitted was too long. Could you shorten it and try again, please?'))
+            
+            return ''.join(char for char in message if char.isalnum() or char.isspace())
+        except ValueError:
+            sys.exit()
 
 
 def speech_recognition(timeout=30, language='en'):
@@ -36,9 +48,13 @@ def speech_recognition(timeout=30, language='en'):
         try:
             print('Speak now...')
             audio = r.listen(source, timeout=timeout)
-            return r.recognize_google(audio, language=language)
+            recognized = r.recognize_google(audio, language=language)
+            if recognized.strip():
+                return recognized
+            else:
+                return ''
         except sr.UnknownValueError:
-            print('I\'m sorry, but I couldn\'t understand what you said.')
+            voice('I\'m sorry, but I couldn\'t understand what you said.')
         except sr.RequestError as e:
             print(f'I encountered an issue accessing the speech recognition service: {e}')
         except Exception as e:
@@ -152,6 +168,9 @@ def commands(message):
     if 'change my name' in message:
         your_name()
 
+    elif 'what is my name' in message:
+        voice(f"You are called {dbm.user.info['name']}")
+
     elif 'create' in message and 'task' in message:
         tasks = []
         voice('Say "stop" to end adding tasks.')
@@ -252,11 +271,13 @@ def commands(message):
 
 def main():
     try:
+        assistant = Assistant()
+
         while True:
             keyword = speech_recognition().capitalize()
             message = input_validation(keyword)
-            if message == assistant.info['name']:
-                voice(f"Hello! I'm {assistant.info['name']}. How can I assist you today?")
+            if message == assistant.get_name():
+                voice(f"Hello! I'm {assistant.get_name()}. How can I assist you today?")
                 break
             else:
                 continue
@@ -266,8 +287,12 @@ def main():
             message = input_validation(keyword)
             if message:
                 print(f'You: {message}')
-                main_commands(message)
-                commands(message)
+                main_commands_list = main_commands(message)
+                if main_commands_list and message in main_commands_list:
+                    main_commands(message)
+                else:
+                    commands(message)
+                
 
     except KeyboardInterrupt:
         print("\nExiting the program.")
