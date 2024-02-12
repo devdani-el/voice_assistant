@@ -97,9 +97,13 @@ def assistant():
 def help_functions():
     voice('I\'m here to help! Currently, I can assist you with: tasks, perform web searches, and even translate words for you. Feel free to ask anything.')
     helps = {
+
         'Tasks': 'Do you have something important to remember or to-do? say \'create task\'',
+        'To view your tasks': 'just say "display task"',
+        'To delete': 'say "delete task" followed by the task you want to remove, or you can say "delete all tasks"',
         'Perform web search': 'Access the web by saying \'search for\', and then say what you want to search for.',
-        'and even translate words for you': 'with the command: \'translate to\', followed by the desired language'
+        'and even translate words for you': 'with the command: \'translate to\', followed by the desired language',
+        'You can change some settings, such as': 'Give me a new name' 'Change how I address you',
     }
     for key, value in helps.items():
         print(f'{key}: {value}')
@@ -161,6 +165,7 @@ def main_commands(message):
             help_functions()
         elif 'day begins' in message:
             voice('Alright, where do we begin?')
+        else:
             commands(message)
     except Exception as e:
         print(f'Sorry, something went wrong while processing your request: {e}')
